@@ -2,16 +2,86 @@
 <html lang="en">
 <head>
   <title>aili.ca home page</title>
+  <meta name="viewport" content="initial-scale=1" />
+  <style>
+    @import url(https://fonts.googleapis.com/css?family=Lobster);
+
+    body {
+      font-family: Verdana;
+    }
+
+    .container {
+      margin: auto;
+      max-width: 720px;
+    }
+
+    h1 {
+      color: #111111;
+      font-family: 'Lobster', cursive;
+      font-size: 120px;
+      font-weight: bold;
+      letter-spacing: -1px;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 40px;
+    }
+
+    .books {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-auto-rows: 300px;
+      grid-gap: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .books {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 440px) {
+      .books {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    a.book {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f8f8f8;
+      padding: 10px;
+      border: 1px solid #cccccc;
+      color: #0268b4;
+      text-decoration: none;
+    }
+
+    a.book:hover {
+      border: 1px solid #ff9900;
+    }
+
+    .banner {
+      width: 100%;
+      height: 200px;
+    }
+  </style>
 </head>
 <body>
-  <p>Hi! My name is Aili! I'm 11 years old and I love to write novels. You can see my latest novels here: </p>
-  <p> </p>
-  <p>
-      <a href="https://docs.google.com/document/d/1uLrPYpjGn9ZZb6whujmheJXxIcFf0LelRVzgnZwgAnc/edit?usp=sharing">The Arizona</a>
-    </p> 
-  <p><a href="https://docs.google.com/document/d/10nHRnb0bSHBQMB8dwNvVZvWPw05keNlu3iQBgsuzOvQ/edit?usp=sharing">The sinking of the Titanic</a></p>
-  <p><a href="https://docs.google.com/document/d/1kvhNrd3cwhLhNKegaMXBiXEeCjCsGe2L-IEQz4A96i0/edit?usp=sharing">The Teddy Bear Toss</a></p>
-
-    <p><img width="400" src="https://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?cs=srgb&dl=beautiful-blur-bright-326055.jpg&fm=jpghttps://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?cs=srgb&dl=beautiful-blur-bright-326055.jpg&fm=jpghttps://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?cs=srgb&dl=beautiful-blur-bright-326055.jpg&fm=jpghttps://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?cs=srgb&dl=beautiful-blur-bright-326055.jpg&fm=jp"></p>
+  <div class="container">
+    <h1>Aili.ca</h1>
+    <p>Hi! My name is Aili! I'm 11 years old and I love to write novels. You can see my latest novels here: </p>
+    <div class="books">
+      <a class="book" href="https://docs.google.com/document/d/1uLrPYpjGn9ZZb6whujmheJXxIcFf0LelRVzgnZwgAnc/edit?usp=sharing">
+        The Arizona
+      </a>
+      <a class="book" href="https://docs.google.com/document/d/10nHRnb0bSHBQMB8dwNvVZvWPw05keNlu3iQBgsuzOvQ/edit?usp=sharing">
+        The sinking of the Titanic
+      </a>
+      <a class="book" href="https://docs.google.com/document/d/1kvhNrd3cwhLhNKegaMXBiXEeCjCsGe2L-IEQz4A96i0/edit?usp=sharing">
+        The Teddy Bear Toss
+      </a>
+    </div>
+    <p><img class="banner" src="https://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?cs=srgb&dl=beautiful-blur-bright-326055.jpg&fm=jpghttps://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?cs=srgb&dl=beautiful-blur-bright-326055.jpg&fm=jpghttps://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?cs=srgb&dl=beautiful-blur-bright-326055.jpg&fm=jpghttps://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?cs=srgb&dl=beautiful-blur-bright-326055.jpg&fm=jp"></p>
+  </div>
 </body>
 </html>
