@@ -1,2 +1,2 @@
 # Force HTTPS
-http://get.bcjobs.ca/* https://get.bcjobs.ca/:splat 301!
+http://www.aili.ca/* https://www.aili.ca/:splat 301!
