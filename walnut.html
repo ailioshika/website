@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body { margin: 0;   font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; }
+    table { width:100%; }
+    tr { vertical-align: top; }
+    .col { padding: 20px; }
+    .col:nth-child(2) { width:300px;border-left: 1px solid #ccc; }
+    .small { font-size: 12px; }
+    .heading { text-align: center; padding:5px; background: rgb(90, 110, 142); color: white; font-weight: bold; }
+    .text-right { text-align: right; }
+  </style>
+</head>
+<body>
+  <table>
+    <tbody>
+      <tr>
+        <td class="col">
+            <div style="width: 680px; margin: 0 auto;">
+              <svg width="680" height="680" xmlns="http://www.w3.org/2000/svg" />
+            </div>
+        </td>
+        <td class="col" data-outlet="details"></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script id="details" type="text/html">
+    <table>
+      <tbody>
+        <tr>
+          <td class="heading" colspan="2"><%- property.id %> <%- property.street %></td>
+        </tr>
+        <tr>
+          <td>Assessment:</td>
+          <td>$<%- formatNumber(property.assessment) %></td>
+        </tr>
+        <tr>
+          <td>First floor:</td>
+          <td>
+            <% if (property.firstFloorArea) { %>
+              <%- formatNumber(property.firstFloorArea) %> sqft
+            <% } %>
+          </td>
+        </tr>
+        <tr>
+          <td>Second floor:</td>
+          <td>
+            <% if (property.secondFloorArea) { %>
+              <%- formatNumber(property.secondFloorArea) %> sqft
+            <% } %>
+          </td>
+        </tr>
+        <tr>
+          <td>Basement:</td>
+          <td>
+              <% if (property.basementArea) { %>
+                <%- formatNumber(property.basementArea) %> sqft
+            <% } %>
+          </td>
+        </tr>
+        <tr>
+          <td>Total floor space:</td>
+          <td><%- formatNumber(property.floorSpaceTotal) %> sqft</td>
+        </tr>
+        <tr>
+          <td>Lot:</td>
+          <td><%- formatNumber(property.lot) %> sqft</td>
+        </tr>
+        <tr>
+            <td>Sales:</td>
+            <td>
+              <table>
+                <tbody>
+                  <% _.each(sales, function(s) { %>
+                    <tr class="small">
+                        <td><%- s.date %>:</td>
+                        <td class="text-right">$<%- formatNumber(s.price) %></td>
+                      </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+
+  <script>
+    const defaultPathColor = 'rgb(196, 219, 235)';
+    const highlightPathColor = 'rgb(45, 72, 115)';
+
+    let formatNumber = n => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+    let detailsTemplate = _.template(document.querySelector('#details').innerHTML);
+
+    document.querySelector('svg').addEventListener('click', e => {
+      if (e.target.tagName  != 'path') return;
+
+      e.target
+        .parentElement.querySelectorAll('path')
+        .forEach(p => {
+          p.style.stroke = defaultPathColor;
+          p.style.fill = defaultPathColor;
+        });
+
+      e.target.style.stroke = highlightPathColor;
+      e.target.style.fill = highlightPathColor;
+      e.target.parentElement.appendChild(e.target); // bring to front
+
+      document.querySelector('[data-outlet="details"]').innerHTML = detailsTemplate({
+        property: properties.find(p => p.id == e.target.getAttribute('data-property')),
+        sales: sales.filter(s => s.propertyId == e.target.getAttribute('data-property'))
+      });
+    }, false);
+
+    let properties = [
+      { id: 1889, street: "Walnut Cres", assessment: 1343000, firstFloorArea: 1697, secondFloorArea: 1211, basementArea: 0, floorSpaceTotal: 2908, lot: 7623, path: "M 620 105 619 13 667 13 666 97 659 105 620 105Z" },
+      { id: 1887, street: "Walnut Cres", assessment: 1361000, firstFloorArea: 2042, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 2042, lot: 7205, path: "M 574 105 573 12 614 13 619 13 620 105 574 105Z" },
+      { id: 1885, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 528 106 527 12 561 12 573 12 574 105 528 106Z" },
+      { id: 1883, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 483 106 482 11 509 11 527 12 528 106 483 106Z" },
+      { id: 1881, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 438 107 437 11 456 11 482 11 483 106 438 107Z" },
+      { id: 1879, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 368 26 382 19 400 10 417 11 437 11 438 107 421 107 410 112 368 26Z" },
+      { id: 1877, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 328 45 347 36 368 26 410 112 370 132 328 45Z" },
+      { id: 1875, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 288 65 300 59 328 45 370 132 330 151 288 65Z" },
+      { id: 1873, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 248 84 253 82 288 65 330 151 290 171 248 84Z" },
+      { id: 1871, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 248 84 290 171 250 190 208 104 248 84Z" },
+      { id: 1869, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 168 123 205 105 208 104 250 190 210 210 168 123Z" },
+      { id: 1867, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 128 143 158 128 168 123 210 210 170 229 128 143Z" },
+      { id: 1865, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 86 163 87 163 128 143 170 229 159 235 157 236 155 236 153 237 152 237 150 237 148 237 146 237 145 237 143 236 140 235 137 234 133 234 130 234 127 234 124 235 121 235 86 163Z"  },
+      { id: 1863, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 16 197 86 163 121 235 117 236 114 238 111 239 108 241 105 244 103 246 101 249 99 252 16 197Z" },
+      { id: 1861, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 16 197 99 252 97 255 95 258 94 261 93 264 93 268 92 271 92 275 93 278 16 278 16 230 16 197Z"  },
+      { id: 1859, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 16 278 93 278 93 282 94 285 96 288 97 291 99 294 101 297 103 300 105 301 106 302 107 304 108 305 108 307 109 309 109 311 109 312 109 314 109 328 16 329 16 283 16 278Z" },
+      { id: 1857, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 17 376 17 376 16 330 16 329 109 328 110 375 17 376Z" },
+      { id: 1855, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 110 422 17 422 17 377 17 376 17 376 110 375 110 422Z" },
+      { id: 1853, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 17 469 17 424 17 422 110 422 110 469 17 469Z" },
+      { id: 1851, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 17 518 17 471 17 469 110 469 110 492 110 494 110 496 110 498 109 499 108 501 108 502 107 504 106 505 104 507 102 509 100 511 99 514 97 517 96 519 17 518Z"  },
+      { id: 1849, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 17 518 96 519 95 523 94 526 94 529 93 532 93 536 94 539 94 542 95 545 96 548 98 551 99 554 101 557 35 587 29 605 28 604 27 602 26 601 25 599 24 598 22 597 21 596 19 596 18 595 17 518Z"  },
+      { id: 1847, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 35 587 101 557 103 559 106 562 108 564 111 566 113 567 116 569 119 570 123 571 50 659 10 658 10 633 12 633 14 633 15 632 17 632 19 631 20 630 22 630 23 629 24 627 26 626 27 625 28 623 28 622 29 620 30 619 30 617 30 615 30 613 30 612 30 610 30 608 29 607 29 605 35 587Z" },
+      { id: 1845, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 50 659 123 571 126 572 130 572 133 572 137 572 140 571 144 570 147 569 146 659 136 659 93 659 50 659Z"  },
+      { id: 1843, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 146 659 147 569 150 568 153 566 156 564 159 561 160 560 161 559 163 558 164 557 166 557 168 556 169 556 171 556 173 556 201 556 200 660 179 660 146 659Z" },
+      { id: 1841, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 200 660 201 556 245 556 243 660 222 660 200 660Z" },
+      { id: 1839, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 245 556 287 557 286 661 265 661 243 660 245 556Z" },
+      { id: 1837, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 286 661 287 557 329 557 328 661 308 661 286 661Z" },
+      { id: 1835, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 328 661 329 557 371 557 370 662 350 661 328 661Z" },
+      { id: 1833, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 370 662 371 557 413 558 412 662 393 662 370 662Z" },
+      { id: 1831, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 412 662 413 558 455 558 454 662 436 662 412 662Z" },
+      { id: 1829, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 454 662 455 558 497 559 496 663 479 663 454 662Z" },
+      { id: 1827, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 496 663 497 559 539 559 538 663 530 663 496 663Z" },
+      { id: 1825, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 538 663 539 559 581 559 581 611 580 664 538 663Z" },
+      { id: 1886, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 528 252 529 149 571 149 571 198 571 243 571 252 528 252Z" },
+      { id: 1882, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 485 252 486 149 529 149 528 252 485 252Z" },
+      { id: 1880, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 464 150 486 149 485 252 449 253 432 154 443 151 454 150 464 150Z" },
+      { id: 1876, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 375 177 401 165 411 160 421 157 432 154 449 253 419 267 375 177Z" },
+      { id: 1874, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 336 196 375 177 419 267 380 286 336 196Z" },
+      { id: 1872, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 297 215 336 196 380 286 370 291 341 305 297 215Z" },
+      { id: 1870, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 259 234 297 215 341 305 302 324 259 234Z" },
+      { id: 1868, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 220 253 259 234 302 324 264 343 220 253Z" },
+      { id: 1864, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 161 281 220 253 264 343 251 349 152 296 152 295 153 293 153 292 153 291 154 289 154 288 155 287 156 286 157 285 158 284 159 283 160 282 161 281Z" },
+      { id: 1858, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 153 378 152 296 251 349 251 365 251 378 153 378Z" },
+      { id: 1856, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 153 422 153 378 251 378 252 422 153 422Z" },
+      { id: 1854, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 153 468 153 422 252 422 252 467 153 468Z" },
+      { id: 1852, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 153 468 252 467 253 513 161 512 153 505 153 468Z" },
+      { id: 1838, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 252 467 348 468 348 506 340 514 253 513 252 467Z" },
+      { id: 1830, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 391 467 483 468 482 515 398 515 390 507 391 467Z" },
+      { id: 1828, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 483 415 526 416 526 516 482 515 483 468 483 415Z" },
+      { id: 1826, street: "Walnut Cres", assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 526 416 570 416 570 425 570 471 569 516 526 516 526 416Z" },
+      { id: 650,  street: "Walnut Pl",   assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 252 422 348 423 348 468 252 467 252 422Z" },
+      { id: 652,  street: "Walnut Pl",   assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 251 365 360 395 358 398 355 401 354 403 352 406 351 409 350 413 349 416 348 419 348 423 252 422 251 378 251 365Z" },
+      { id: 654,  street: "Walnut Pl",   assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 251 365 251 349 264 343 302 324 383 382 370 388 367 390 365 391 362 393 360 395 251 365Z" },
+      { id: 656,  street: "Walnut Pl",   assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 370 291 405 371 404 371 404 372 403 372 383 382 302 324 341 305 370 291Z" },
+      { id: 660,  street: "Walnut Pl",   assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 370 291 380 286 419 267 449 253 420 352 418 355 416 357 414 360 412 363 412 363 411 365 410 366 409 367 408 369 407 370 405 371 370 291Z" },
+      { id: 662,  street: "Walnut Pl",   assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 420 352 449 253 485 252 528 252 448 342 445 342 441 342 438 343 435 344 431 345 428 346 425 348 423 350 420 352Z" },
+      { id: 661,  street: "Walnut Pl",   assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 448 342 528 252 571 252 571 280 478 357 475 355 473 352 470 350 468 348 465 346 462 345 458 344 455 343 452 342 448 342Z" },
+      { id: 659,  street: "Walnut Pl",   assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 478 357 571 280 571 289 570 334 570 349 485 383 485 380 485 376 484 373 484 370 483 366 481 363 480 360 478 357Z" },
+      { id: 657,  street: "Walnut Pl",   assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 463 415 466 413 469 412 471 410 474 407 476 405 478 402 480 399 482 396 483 393 484 390 485 387 485 383 570 349 570 380 570 416 526 416 483 415 463 415Z" },
+      { id: 653,  street: "Walnut Pl",   assessment: 0, firstFloorArea: 0, secondFloorArea: 0, basementArea: 0, floorSpaceTotal: 0, lot: 0, path: "M 391 467 391 439 391 437 391 435 392 433 392 432 393 430 394 429 395 427 396 426 397 424 399 423 400 422 401 421 403 420 405 420 406 419 408 419 410 418 412 418 446 419 450 419 453 418 457 417 460 416 463 415 483 415 483 468 391 467Z" },
+    ];
+
+    let sales = [
+      { propertyId: 1889, date: 'Jun 11, 2010', price: 665000 },
+      { propertyId: 1887, date: 'Jun 29, 2017', price: 1398000 },
+      { propertyId: 1887, date: 'Aug 28, 1998', price: 328000 },
+    ]
+
+    properties.forEach(p => {
+      let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.style.fill = defaultPathColor;
+      path.style.fillOpacity = '0.3';
+      path.style.stroke = defaultPathColor;
+      path.style.strokeWidth = '2';
+      path.setAttribute('d', p.path);
+      path.setAttribute('data-property', p.id);
+      document.querySelector('svg').appendChild(path);
+    });
+
+  </script>
+
+</body>
+</html>
