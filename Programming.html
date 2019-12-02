@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Programming</title>
+</head>
+
+<body>
+
+  <div id="clickme">click me</div>
+
+  <input id="input" autofocus>
+
+  <ul id="result"></ul>
+
+  <script>
+    let x = 5;
+    let y = x + 1;
+    let s = 'y';
+    let a = [7, 8, 9, 3, 'hi'];
+    let sum = add(1, 2);
+
+    if (y < 10) {
+      print('small');
+    } else {
+      print('big');
+    }
+
+    for (let i = 0; i <= 5; i = i + 1) {
+      console.log(i);
+    }
+
+    a.forEach(k => {
+      console.log(k);
+    });
+
+    function print(i) {
+      document.querySelector('#result').innerHTML
+        = document.querySelector('#result').innerHTML + '<li style="color:purple;">' + i + '</li>';
+      
+    }
+
+    function addAndTriple(a, b) {
+      let c = a + b;
+      let d = c * 3;
+      return d;
+    }
+
+    function add(a, b) {
+      let c = a + b;
+      return c;
+    }
+
+    document.querySelector('#input').addEventListener('keyup', function(e) {
+      if (e.keyCode == 13) {
+        print(e.target.value);
+        e.target.value = '';
+      }
+    });
+
+
+    document.querySelector('#clickme').addEventListener('click', function(e) {
+      print('you clicked me!');
+    });
+  </script>
+</body>
+</html>

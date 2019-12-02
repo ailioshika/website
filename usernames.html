@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Random Username Generator</title>
+</head>
+
+<body>
+
+  <h1>WELCOME TO THE RANDOM USERNAME GENERATOR</h1>
+
+  <button id="generate">Generate</button>
+
+  <div id="result" style="margin: 20px 0;"></div>
+
+  <script>
+   
+   function print(i) {
+      document.querySelector('#result').innerHTML
+        = document.querySelector('#result').innerHTML + '<div style="margin:5px 0;">' + i + '</div>'; 
+    }
+
+    let colour = ["red", "orange", "yellow", "green", "blue", "purple", "pink", "magenta", "turquoise", "scarlet", "brown", "gray", "black", "white", "silver", "gold", "bronze", "maroon", "seipa", "aqua", "violet", "lime", "lemon", "cyan"];
+    let adjective = ["happy", "sad", "sharp", "silly", "fluffy", "juicy", "smelly", "salty", "sour", "sweet", "spicy", "hungry", "heroic", "colorful", "generous", "tiring", "stringy", "yucky", "delicious", "angry", "murderous", "enthusiastic", "annoying", "tall", "short", "fat","skinny"];
+    let noun = ["Cat", "Dog", "Parrot", "Fish", "Dragon", "Giraffe", "Shark", "Beaver", "Griffin", "Unicorn", "Phoenix", "Quilin", "Kraken", "Basilisk", "Puppy", "Kitten", "Penguin", "Octopus", "Black Panther", "Tiger", "Lion", "Jaguar", "Buffalo", "Chicken", "Potato", "Pig", "Cow", "Horse", "Human", "Sheep", "Duck", "Rhino", "Hyena", "Elephant", "Bunny", "Rabbit", "Guinea Pig", "Hamster", "Gerbil", "Ferret", "Fly", "Butterfly", "Dragonfly", "Book", "Tree", "Plant", "Pencil", "Flower", "Frog", "Toad", "Taco", "Sushi", "Bear", "Owl", "Bird", "Notebook", "Homework", "Pen", "Banner", "Pizza", "Pasta", "Sapphire", "Diamond"];
+
+  function randomPick(a) {
+    let index = Math.floor(Math.random() * a.length);
+    return a[index];
+  }
+
+  function generateUsername() {
+    let randomColour = randomPick(colour);
+    let randomAdjective = randomPick(adjective);
+    let randomNoun = randomPick(noun);
+    return randomColour + randomAdjective + randomNoun + (Math.floor(Math.random() * 100) + 1);
+  }
+
+  document.querySelector('#generate').addEventListener('click', function(e) {
+    print(generateUsername());
+  });
+
+  </script>
+</body>
+</html>
